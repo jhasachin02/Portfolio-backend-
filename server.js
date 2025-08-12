@@ -117,18 +117,31 @@ app.post('/api/chat', async (req, res) => {
       return res.status(400).json({ error: 'Message is required' });
     }
 
+
     // Get the model
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
-    // Create the prompt with context
-    const prompt = `${portfolioContext}
+    // Strict portfolio context
+    const context = `
+      You are Sachin Jha's portfolio assistant. Answer ONLY using the information below.
+      If the question is not related to Sachin's portfolio, politely say you can only answer portfolio-related queries.
 
-User Question: "${message}"
+      ---PORTFOLIO DATA---
+      Name: Sachin Jha
+      Skills: React.js, JavaScript, Node.js, MongoDB, Express.js, HTML, CSS, TypeScript
+      Projects:
+      1. E-commerce MERN app: Full-stack shopping platform with admin dashboard.
+      2. Portfolio Website: Responsive React portfolio with animations.
+      3. Travel UI/UX: Design for a travel booking app.
+      Experience: 2+ years as a full-stack developer.
+      Contact: jhasachin1307@gmail.com
+      --------------------
 
-Please provide a helpful and engaging response based on Sachin's portfolio information. If the question is not related to Sachin's portfolio, politely redirect the conversation back to his professional background, skills, or projects.`;
+      User's question: "${message}"
+    `;
 
     // Generate content
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent(context);
     const response = await result.response;
     const text = response.text();
 
