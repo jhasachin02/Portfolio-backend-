@@ -8,7 +8,7 @@ const port = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // React app URL
+  origin: ['http://localhost:5173', 'https://localhost:5173', 'http://127.0.0.1:5173', 'https://sachin-portfolio-sigma.vercel.app', 'https://jhasachin02.github.io'], // Allow multiple origins for development and production
   credentials: true
 }));
 app.use(express.json());
@@ -149,6 +149,19 @@ Please provide a helpful and engaging response based on Sachin's portfolio infor
       res.status(500).json({ error: 'Sorry, I encountered an error. Please try again.' });
     }
   }
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: '🚀 Sachin Portfolio Chatbot API is live!',
+    endpoints: {
+      health: '/api/health',
+      chat: '/api/chat (POST)'
+    },
+    status: 'online',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Health check endpoint
